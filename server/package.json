@@ -1,0 +1,22 @@
+{
+  "name": "node_basic",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "Hritik",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.16",
+    "node-fetch": "^2.6.0",
+    "pug": "^3.0.0"
+  }
+}
