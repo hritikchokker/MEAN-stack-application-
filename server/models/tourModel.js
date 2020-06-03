@@ -23,7 +23,7 @@ const tourSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'A tour must have a difficulty'],
     enum: {
-      values:  ['easy', 'medium', 'difficult'],
+      value:  ['easy', 'medium', 'difficult'],
       message: 'Difficulty is either easy, medium, difficult'
     }
   },
@@ -42,7 +42,7 @@ const tourSchema = new mongoose.Schema({
 
         return val < this.price;
       },
-      message: `Discount price (${value}) should be below the regular price`
+      message: `Discount price should be below the regular price`
     }
   },
   price: {
@@ -68,10 +68,11 @@ const tourSchema = new mongoose.Schema({
     select: false
   },
   startDates: [Date],
-  secretTour:{
-    type: boolean,
-    default: false
-  }
+  secretTour: Boolean
+  // secretTour:{
+  //   type: boolean,
+  //   default: false
+  // }
 },{
   toJSON: {virtuals: true},
   toObject: {virtuals: true}

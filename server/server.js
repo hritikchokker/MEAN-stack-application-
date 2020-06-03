@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 
 process.on('uncaughtException', err => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
-    console.log(err.name, err.message);
+    console.log(err);
     process.exit(1);
 });
 
@@ -24,8 +24,6 @@ mongoose.connect(DB, {
 
 }).then(res => {
     console.log('MongoDB connection successFull');
-}).catch(err => {
-    console.log(err)
 })
 const port = process.env.PORT || 3000;
 
