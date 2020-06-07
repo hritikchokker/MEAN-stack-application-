@@ -1,10 +1,11 @@
 const User = require('../models/userModel');
+const {promisify} = require('util');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appErrors');
 const catchAsync = require('../utils/catchAsync');
 
-const signToken = id =>{
- return jwt.sign({ id }, process.env.JWT_SECRET, {
+const signToken = id => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN
   })
 }
@@ -40,5 +41,33 @@ exports.login = catchAsync(async (req, res, next) => {
     status: 'success',
     token
   })
+})
+
+
+exports.protect = catchAsync(async (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+  if (!token) {
+    return next(new AppError('You are not logged in Please login', 401))
+  }
+
+  const decoded = await promisify(jwt.verify(token, process.env.JWT_SECRET));
+
+  const freshUser = await User.findById(decoded.id);
+  if(!freshUser){
+    return next(
+      new AppError('The user belonging to token does not exists',401)
+    );
+  }
+
+  if(freshUser.changePasswordAfter(decoded.iat)){
+    return next(new AppError('User Recently changed password. Please login again',401));
+  }
+  req.user = freshUser;
+  next();
 })
 

@@ -34,10 +34,11 @@ exports.deleteUser = catchAsync(async (req, res,next) => {
 });
 
 exports.getAllUsers = catchAsync(async (req, res,next) => {
-  const result = await userModel.find();
+  const users = await userModel.find();
   res.status(200).json({
     message: 'User Lists fetched Successfully',
-    data: result
+    results: users.length,
+    data: users
   })
 });
 
