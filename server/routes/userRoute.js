@@ -4,18 +4,21 @@ const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 
 
-router.post('/signup',authController.signup);
+router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
+router.post('/forgotPassword', authController.forgotPassword);
+router.patch('/resetPassword/:token', authController.resetPassword);
+
 router.route('/')
-    .get(userController.getAllUsers)
-    .post(userController.createUser)
-    .put(userController.updateUser)
-    .delete(userController.deletAllUsers)
+  .get(userController.getAllUsers)
+  .post(userController.createUser)
+  .put(userController.updateUser)
+  .delete(userController.deletAllUsers)
 
 router.route('/:id')
-    .get(userController.viewCurrentUserDetails)
-    .delete(userController.deleteUser)
+  .get(userController.viewCurrentUserDetails)
+  .delete(userController.deleteUser)
 
 
 module.exports = router;
