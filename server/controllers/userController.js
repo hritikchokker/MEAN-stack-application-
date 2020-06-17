@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appErrors');
+const factory = require('./handlerFactory');
 
 exports.createUser = catchAsync(async (req, res, next) => {
   const result = await User.create(req.body)
@@ -26,12 +27,14 @@ exports.viewCurrentUserDetails = catchAsync(async (req, res, next) => {
   })
 });
 
-exports.deleteUser = catchAsync(async (req, res, next) => {
-  await User.deleteOne({ id: req.params.id })
-  res.status(201).json({
-    message: 'User deleted Successfully',
-  })
-});
+// exports.deleteUser = catchAsync(async (req, res, next) => {
+//   await User.deleteOne({ id: req.params.id })
+//   res.status(201).json({
+//     message: 'User deleted Successfully',
+//   })
+// });
+exports.deleteUser = factory.deleteOne(User);
+
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find();
