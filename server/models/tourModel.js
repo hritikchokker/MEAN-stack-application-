@@ -27,7 +27,7 @@ const tourSchema = new mongoose.Schema({
       message: 'Difficulty is either easy, medium, difficult'
     }
   },
-  ratingAverage:{
+  ratingsAverage:{
     type: Number,
     default: 4.5,
     min: [1,'Rating must be above 0'],
@@ -134,6 +134,12 @@ tourSchema.pre(/^find/,function(next){
   });
   next();
 })
+
+// created an index on the basis of price
+// tourSchema.index({price: 1});
+tourSchema.index({price: 1,ratingsAverage: -1});
+tourSchema.index({slug: 1});
+
 
 // tourSchema.pre('save', function (next) {
 //   this.slug = slugify(this.name, { lower: true })

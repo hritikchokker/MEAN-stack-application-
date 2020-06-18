@@ -3,29 +3,16 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appErrors');
 const factory = require('./handlerFactory');
 
-exports.createUser = catchAsync(async (req, res, next) => {
-  const result = await User.create(req.body)
-  res.status(201).json({
-    message: 'User created Successfully',
+exports.createUser = catchAsync(async (req, res) => {
+  res.status(500).json({
+    message: 'This route is not defined. Please use /signup instead',
     data: result
   })
 })
 
-exports.updateUser = catchAsync(async (req, res, next) => {
-  const result = await User.findOneAndUpdate(req.body);
-  res.status(201).json({
-    message: 'User Updated Successfully',
-    data: result
-  })
-});
+exports.updateUser = factory.updateOne(User);
 
-exports.viewCurrentUserDetails = catchAsync(async (req, res, next) => {
-  const result = await User.findById(req.params.id)
-  res.status(201).json({
-    message: 'User details fetched Successfully',
-    data: result
-  })
-});
+exports.viewCurrentUserDetails = factory.getOne(User);
 
 // exports.deleteUser = catchAsync(async (req, res, next) => {
 //   await User.deleteOne({ id: req.params.id })
@@ -36,14 +23,7 @@ exports.viewCurrentUserDetails = catchAsync(async (req, res, next) => {
 exports.deleteUser = factory.deleteOne(User);
 
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-  res.status(200).json({
-    message: 'User Lists fetched Successfully',
-    results: users.length,
-    data: users
-  })
-});
+exports.getAllUsers = factory.getAll(User);
 
 exports.deletAllUsers = catchAsync(async (req, res, next) => {
   await User.deleteMany()
@@ -66,7 +46,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     return next(new AppError('this route is not for password update', 400));
   }
   const filteredBody = filterObj(req.body, 'name', 'email');
-  const updatedUser = User.findByIdAndUpdate(req.iser.id, filteredBody, {
+  const updatedUser = await User.findByIdAndUpdate(req.iser.id, filteredBody, {
     new: true,
     runValidator: true
   });
@@ -77,6 +57,11 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     }
   });
 });
+
+exports.getMe = (req,res,next)=>{
+  req.params.id = req.user.id;
+  next();
+}
 
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
