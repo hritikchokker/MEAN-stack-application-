@@ -34,7 +34,7 @@ router.route('/')
   .delete(userController.deletAllUsers)
 
 router.route('/:id')
-  .get(userController.viewCurrentUserDetails)
+  .get(userController.getUser)
   .delete(userController.deleteUser)
 
 

@@ -6,16 +6,20 @@ const tourRoute = require('./routes/tourRoute');
 const reviewRoute = require('./routes/reviewRoute');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 const AppError = require('./utils/appErrors');
 const globalErrorHandler = require('./controllers/errorController');
-const rateLimit = require('exprss-rate-limit');
+const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const pug = require('pug');
 
 
-
+app.set('view engine','pug');
+app.set('views',path.join(__dirname,'views'))
+app.use(express.static(path.join(__dirname, 'public')));
 
 // securing http headers
 app.use(helmet());
@@ -35,7 +39,10 @@ const limiter = rateLimit({
 //limiting http request from same ip
 app.use('/api', limiter);
 
-app.use(express.static(`${__dirname}/public`));
+// app.use(express.static(`${__dirname}/public`));
+
+
+
 app.use(express.json({ limit: '10kb' }));
 
 //data sanitization against nosql injection and Xss
@@ -56,6 +63,11 @@ app.use(hpp({
 
 // app.use(express.urlencoded({ extended: true}));
 app.use(cors());
+
+app.get('/home',(req,res)=>{
+
+  res.status(200).render('base')
+})
 
 app.use('/api/v1/tours', tourRoute);
 app.use('/api/v1/users', userRoute);

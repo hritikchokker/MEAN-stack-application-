@@ -12,7 +12,7 @@ exports.createUser = catchAsync(async (req, res) => {
 
 exports.updateUser = factory.updateOne(User);
 
-exports.viewCurrentUserDetails = factory.getOne(User);
+exports.getUser = factory.getOne(User);
 
 // exports.deleteUser = catchAsync(async (req, res, next) => {
 //   await User.deleteOne({ id: req.params.id })
